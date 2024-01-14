@@ -4,6 +4,9 @@
 // Going to use an array for all of my list and my questions.
 // Going to make this code look better, no more bleeding eyes.
 
+// Track the correct answers
+let score = 0;
+
 // Array with my 5 questions and answers
 // Modeled the array after: https://stackoverflow.com/questions/40601896/how-to-get-the-value-from-an-array-which-has-key-value-pair-objects
 // Took awhile to find because I didn't know how to phrase the question.
@@ -86,6 +89,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       }
       // Check answer
       if (answer === q.a) {
+        score++;
         messageUser(q.c); // They got it!
       } else {
         messageUser(q.g); // They didn't get it.
@@ -105,6 +109,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
         answer = parseInt(prompt(q.q));
         // Check the answer
         if(answer === q.a) {
+          score++;
           messageUser('You got the number in ' +(tracker + 1)+ ' tries!');
           break;
         } else if (tracker >= q.s - 1){
@@ -140,6 +145,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
         for (const correctAnswer of q.a){
           console.log('user answer: ' + answer + ' checked against: ' + correctAnswer);
           if (answer === correctAnswer.toLowerCase()){
+            score++;
             messageUser(q.c);
             gotIt = true; // I feel like this is hacky but I couldn't get out of this dang loop.
           }
@@ -218,7 +224,7 @@ function kickOff() {
 
   // Final message
   if (userName !== 'cc'){
-    messageUser('Thanks for playing ' + userName + '!');
+    messageUser('Thanks for playing ' + userName + ' you scored ' + score + '/' + bioQuestions.length + '!');
   } else {
     messageUser('Cheaters never win!');
   }
