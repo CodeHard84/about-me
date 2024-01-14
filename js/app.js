@@ -12,57 +12,153 @@ const bioQuestions = [
   // a = answer
   // c = congratulate
   // g = give answer
+  // t = type YN, INT, TF, etc..
+  // s = How many tries?
   {
     q: 'Is my favorite color orange?',
     a: 'yes',
     c: 'My favorite color is orange! Good Job!',
-    g: 'No, my favorite color is orange!'
+    g: 'No, my favorite color is orange!',
+    t: 'YN'
   },
   {
     q: 'Do I have any experience in JavaScript?',
     a: 'no',
     c: 'Awesome! I really am new to JavaScript!',
-    g: 'I didn\'t know a lick of JavaScript until I started classes.'
+    g: 'I didn\'t know a lick of JavaScript until I started classes.',
+    t: 'YN'
   },
   {
     q: 'Do I want to become a developer?',
     a: 'yes',
     c: 'Yep! I want to write amazing software!',
-    g: 'No, I really do want to become a great developer!'
+    g: 'No, I really do want to become a great developer!',
+    t: 'YN'
   },
   {
     q: 'Is my family my rock?',
     a: 'yes',
     c: 'You\'re right! My family is absolutely my rock.',
-    g: 'No, my family is my world.'
+    g: 'No, my family is my world.',
+    t: 'YN'
   },
   {
     q: 'Do I like games?',
     a: 'yes',
     c: 'I love games, from board games to xbox!',
-    g: 'Who doesn\'t like games! I know I sure do! =)'
+    g: 'Who doesn\'t like games! I know I sure do! =)',
+    t: 'YN'
+  },
+  // Well I refactored my lab02 code before doing lab03 so I am going to refactor
+  // again so we can see if we can fit a square peg (integer) into a round hole (string)
+  {
+    q: 'I am thinking of a number between 1-10, what is it?',
+    a: 6, // need to look into making this random!
+    t: 'INT',
+    s: 4
   }
 ];
 
 // Okay, now I am going to make a function that ask questions. Trying to stay DRY.
-function askYesOrNoQuestions(questions){
+// This was only meant for Yes or No questions. Now with lab03 I need it to also
+// support integers. I will also add true/false questions for future needs.
+
+function askGenericQuestions(questions) { // How can I force a type here? Like I only want this function to take an array as an argument.
   for (const q of questions) {
-    let answer = askQuestion(q.q);
-    // There has to be a better way for this.... Let me know.
-    // Make sure the user answers yes/no or y/n
-    while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
-      answer = askQuestion(q.q + ' Valid input: yes/no or y/n');
+    let answer;
+    // Ok, so we are going to use a switch for the type of question
+    switch (q.t) { // Why does the linter not want the cases indented?
+    case 'YN': // Yes or no questions.
+      answer = sanitizeInput(prompt(q.q), 'str');
+      // Now we popped the question, let's check the input.
+      // Most of this was written for lab02 refactor.
+      while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
+        answer = sanitizeInput(prompt(q.q + ' Valid input: yes/no or y/n'), 'str');
+      }
+      // Check answer
+      if (answer === q.a) {
+        messageUser(q.c); // They got it!
+      } else {
+        messageUser(q.g); // They didn't get it.
+        // We could ask again here, but no need for now.
+      }
+      break;
+    case 'TF': // True or false questions.
+      answer = prompt(q.q);
+      break;
+    case 'INT': { // Questions expecting an integer back.
+      // Think I remember something about prompt only returning a string.... and I was right.
+      // parseInt: https://www.sololearn.com/en/Discuss/2952070/javascript-user-input-solved
+      // isInteger: https://www.tutorialspoint.com/How-to-check-if-a-variable-is-an-integer-in-JavaScript
+      let tracker = 0;
+      // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
+      while(tracker <= q.s - 1) {
+        answer = parseInt(prompt(q.q));
+        // Check the answer
+        if(answer === q.a) {
+          messageUser('You got the number in ' +(tracker + 1)+ ' tries!');
+          break;
+        } else if (tracker >= q.s - 1){
+          messageUser('Sorry you didn\'t get it! The number was ' + q.a );
+          break;
+        } else {
+          if (answer > q.a){
+            messageUser('My number is less than ' +answer+ '.');
+          }
+          if (answer < q.a){
+            messageUser('My number is greater than ' +answer+ '.');
+          } else if (!Number.isInteger(answer) || answer > 10){
+            // We could credit the user another try here by using tracker--, but that's not part of lab03.
+            messageUser('Try to use a number between 1-10');
+          }
+        }
+        tracker++;
+      }
+      break;
     }
-    // We have our answer, now let's just compare it to q.a answer
-    if (answer === q.a) {
-      messageUser(q.c);
-    } else {
-      messageUser(q.g);
+    default: // Should never get here. EVER.
+      console.log('Error in askGenericQuestions: ' + q.t + ' is an invalid type.'); // If you see this check the question array and make sure a: is a valid type.
+      break;
     }
-    // This is working q is the array and the .q is the question in the array.
-    // console.log(q.q);
   }
 }
+
+function sanitizeInput(inputValue, inputType) {
+  if (inputType === 'str'){
+    // Make sure we are not calling toLowerCase on a null type.
+    if (inputValue === null){
+      inputValue = '';
+    }
+    // Ok answer can't be null so let's go ahead and call toLowerCase.
+    inputValue = inputValue.toLowerCase();
+    // Sanitize the answer a bit.
+    if (inputValue === 'y'){
+      inputValue = 'yes';
+    } else if (inputValue === 'n') {
+      inputValue = 'no';
+    }
+    return inputValue;
+  }
+}
+
+// function askYesOrNoQuestions(questions){
+//   for (const q of questions) {
+//     let answer = askQuestion(q.q);
+//     // There has to be a better way for this.... Let me know.
+//     // Make sure the user answers yes/no or y/n
+//     while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
+//       answer = askQuestion(q.q + ' Valid input: yes/no or y/n');
+//     }
+//     // We have our answer, now let's just compare it to q.a answer
+//     if (answer === q.a) {
+//       messageUser(q.c);
+//     } else {
+//       messageUser(q.g);
+//     }
+//     // This is working q is the array and the .q is the question in the array.
+//     // console.log(q.q);
+//   }
+// }
 
 // Ok, now I am going to create a function called kickoff which will start all my other
 // functions.
@@ -77,7 +173,7 @@ function kickOff() {
   // one array of questions. Going to let user completely
   // bypass this if username is 'cc';
   if (userName !== 'cc'){
-    askYesOrNoQuestions(bioQuestions);
+    askGenericQuestions(bioQuestions);
   }
   // Any other functions can be added here to make sure
   // they are executed when the page is loading.
@@ -103,28 +199,28 @@ function messageUser(msg) {
   alert(msg);
 }
 
-function askQuestion(q) {
-  let answer = prompt(q);
-  // Let's squash the bug...
-  // Essentially you can not call toLowerCase on a null value.
-  // So this just changes the null value to an empty string.
-  // Same effect as null - none of the side effects?
-  // I am sure there is a better way but this works for now.
-  // Also, why doesn't VSCode block comment huge walls of text
-  // like this one? LOL =)
-  if (answer === null){
-    answer = '';
-  }
-  // Now we can go toLowerCase
-  answer = answer.toLowerCase();
-  // Sanitize the answer a bit.
-  if (answer === 'y'){
-    answer = 'yes';
-  } else if (answer === 'n') {
-    answer = 'no';
-  }
-  return answer;
-}
+// function askQuestion(q) {
+//   let answer = prompt(q);
+//   // Let's squash the bug...
+//   // Essentially you can not call toLowerCase on a null value.
+//   // So this just changes the null value to an empty string.
+//   // Same effect as null - none of the side effects?
+//   // I am sure there is a better way but this works for now.
+//   // Also, why doesn't VSCode block comment huge walls of text
+//   // like this one? LOL =)
+//   if (answer === null){
+//     answer = '';
+//   }
+//   // Now we can go toLowerCase
+//   answer = answer.toLowerCase();
+//   // Sanitize the answer a bit.
+//   if (answer === 'y'){
+//     answer = 'yes';
+//   } else if (answer === 'n') {
+//     answer = 'no';
+//   }
+//   return answer;
+// }
 
 // Let's kick this party off
 kickOff();
