@@ -56,6 +56,15 @@ const bioQuestions = [
     a: 6, // need to look into making this random!
     t: 'INT',
     s: 4
+  },
+  // Ask a multiple choice question
+  {
+    q: 'What is one of my FAVORITE movies?',
+    a: ['Demolition Man', 'Judge Dredd', 'Dredd', 'Total Recall', 'Moon',
+      'The Fifth Element', '47 Ronin', 'Lord of the Rings', 'The Hobbit', 'Con Air'],
+    c: 'You nailed it! Congrats!',
+    t: 'MC',
+    s: 6
   }
 ];
 
@@ -113,6 +122,35 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
           }
         }
         tracker++;
+      }
+      break;
+    }
+    // Turns out the case was a great idea =)
+    case 'MC': {
+      let gotIt = false;
+      let tries = q.s; // 6
+      while (tries > 0 && gotIt !== true){
+        // Pop the question
+        answer = prompt(q.q);
+        if (answer === null){
+          answer = '';
+        }
+        answer = answer.toLowerCase();
+        // Iterate through the array and compare.
+        for (const correctAnswer of q.a){
+          console.log('user answer: ' + answer + ' checked against: ' + correctAnswer);
+          if (answer === correctAnswer.toLowerCase()){
+            messageUser(q.c);
+            gotIt = true; // I feel like this is hacky but I couldn't get out of this dang loop.
+          }
+        }
+        tries--;
+      }
+      let listAnswers = '';
+      // console.log(q.a);
+      if (tries === 0){
+        for (const answers of q.a) { listAnswers += answers + ' '; } // Made this a one liner because it looks better.
+        messageUser('Sorry the correct answers were: ' + listAnswers + ' better luck next time!');
       }
       break;
     }
