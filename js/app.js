@@ -13,31 +13,31 @@ const bioQuestions = [
   // c = congratulate
   // g = give answer
   {
-    q: 'Is my favorite color orange? Input: y/n or yes/no',
+    q: 'Is my favorite color orange?',
     a: 'yes',
     c: 'My favorite color is orange! Good Job!',
     g: 'No, my favorite color is orange!'
   },
   {
-    q: 'Do I have any experience in JavaScript? Input: y/n or yes/no',
+    q: 'Do I have any experience in JavaScript?',
     a: 'no',
     c: 'Awesome! I really am new to JavaScript!',
     g: 'I didn\'t know a lick of JavaScript until I started classes.'
   },
   {
-    q: 'Do I want to become a developer? Input: y/n or yes/no',
+    q: 'Do I want to become a developer?',
     a: 'yes',
     c: 'Yep! I want to write amazing software!',
     g: 'No, I really do want to become a great developer!'
   },
   {
-    q: 'Is my family my rock? Input: y/n or yes/no',
+    q: 'Is my family my rock?',
     a: 'yes',
     c: 'You\'re right! My family is absolutely my rock.',
     g: 'No, my family is my world.'
   },
   {
-    q: 'Do I like games? Input: y/n or yes/no',
+    q: 'Do I like games?',
     a: 'yes',
     c: 'I love games, from board games to xbox!',
     g: 'Who doesn\'t like games! I know I sure do! =)'
@@ -45,13 +45,14 @@ const bioQuestions = [
 ];
 
 // Okay, now I am going to make a function that ask questions. Trying to stay DRY.
+// Okay, now I am going to make a function that ask questions. Trying to stay DRY.
 function askYesOrNoQuestions(questions){
   for (const q of questions) {
     let answer = askQuestion(q.q);
     // There has to be a better way for this.... Let me know.
     // Make sure the user answers yes/no or y/n
     while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
-      answer = answer = askQuestion(q.q);
+      answer = askQuestion(q.q + ' Valid input: yes/no or y/n');
     }
     // We have our answer, now let's just compare it to q.a answer
     if (answer === q.a) {
