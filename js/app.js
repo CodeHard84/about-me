@@ -105,7 +105,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       // isInteger: https://www.tutorialspoint.com/How-to-check-if-a-variable-is-an-integer-in-JavaScript
       let tracker = 0;
       // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
-      while(tracker <= q.s - 1) {
+      while(tracker <= q.s - 1) { // Account for starting at 0. Better way for this?
         answer = parseInt(prompt(q.q));
         // Check the answer
         if(answer === q.a) {
