@@ -106,13 +106,6 @@ function messageUser(msg) {
 
 function askQuestion(q) {
   let answer = prompt(q);
-  // Check to null or blank so the code doesn't crash.
-  // Sanitize the answer a bit.
-  if (answer === 'y'){
-    answer = 'yes';
-  } else if (answer === 'n') {
-    answer = 'no';
-  }
   // Let's squash the bug...
   // Essentially you can not call toLowerCase on a null value.
   // So this just changes the null value to an empty string.
@@ -123,7 +116,15 @@ function askQuestion(q) {
   if (answer === null){
     answer = '';
   }
-  return answer.toLowerCase();
+  // Now we can go toLowerCase
+  answer = answer.toLowerCase();
+  // Sanitize the answer a bit.
+  if (answer === 'y'){
+    answer = 'yes';
+  } else if (answer === 'n') {
+    answer = 'no';
+  }
+  return answer;
 }
 
 // Let's kick this party off
