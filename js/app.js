@@ -147,7 +147,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
           if (answer === correctAnswer.toLowerCase()){
             score++;
             messageUser(q.c);
-            gotIt = true; // I feel like this is hacky but I couldn't get out of this dang loop.
+            gotIt = true; // I feel like this is hacky but I couldn't get out of this dang nested while loop.
           }
         }
         tries--;
