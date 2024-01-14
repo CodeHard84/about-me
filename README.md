@@ -31,3 +31,7 @@ Me
 ## License
 
 MIT
+
+## Lighthouse
+
+![Lighthouse Score](img/lighthouse.jpg)
