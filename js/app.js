@@ -45,7 +45,6 @@ const bioQuestions = [
 ];
 
 // Okay, now I am going to make a function that ask questions. Trying to stay DRY.
-// Okay, now I am going to make a function that ask questions. Trying to stay DRY.
 function askYesOrNoQuestions(questions){
   for (const q of questions) {
     let answer = askQuestion(q.q);
