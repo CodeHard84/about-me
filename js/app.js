@@ -81,11 +81,11 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
     // Ok, so we are going to use a switch for the type of question
     switch (q.t) { // Why does the linter not want the cases indented?
     case 'YN': // Yes or no questions.
-      answer = sanitizeInput(prompt(q.q), 'str');
+      answer = sanitizeInput(promptUser(q.q), 'str');
       // Now we popped the question, let's check the input.
       // Most of this was written for lab02 refactor.
       while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
-        answer = sanitizeInput(prompt(q.q + ' Valid input: yes/no or y/n'), 'str');
+        answer = sanitizeInput(promptUser(q.q + ' Valid input: yes/no or y/n'), 'str');
       }
       // Check answer
       if (answer === q.a) {
@@ -97,7 +97,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       }
       break;
     case 'TF': // True or false questions.
-      answer = prompt(q.q);
+      answer = promptUser(q.q);
       break;
     case 'INT': { // Questions expecting an integer back.
       // Think I remember something about prompt only returning a string.... and I was right.
@@ -106,7 +106,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       let tracker = 0;
       // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
       while(tracker <= q.s - 1) { // Account for starting at 0. Better way for this?
-        answer = parseInt(prompt(q.q));
+        answer = parseInt(promptUser(q.q));
         // Check the answer
         if(answer === q.a) {
           score++;
@@ -136,7 +136,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       let tries = q.s; // 6
       while (tries > 0 && gotIt !== true){
         // Pop the question
-        answer = prompt(q.q);
+        answer = promptUser(q.q);
         if (answer === null){
           answer = '';
         }
@@ -165,6 +165,17 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       break;
     }
   }
+}
+
+// Implementing suggestion.
+// Did you mean something like this? Or do I need
+// to be in the scope of the loops?
+// this really does not change much from prompt();
+// is the point to be able to modify it down the road?
+function promptUser(question){
+  // Parse
+  let promptResponse = (prompt(question));
+  return promptResponse;
 }
 
 function sanitizeInput(inputValue, inputType) {
