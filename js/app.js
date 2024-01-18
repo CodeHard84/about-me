@@ -56,7 +56,7 @@ const bioQuestions = [
   // again so we can see if we can fit a square peg (integer) into a round hole (string)
   {
     q: 'I am thinking of a number between 1-10, what is it?',
-    a: Math.floor(Math.random() * (10 - 1) + 1), // Added random during code review/pair programming lab04.
+    a: Math.floor(Math.random() * (10 - 1 + 1) + 1), // Added random during code review/pair programming lab04.
     t: 'INT',
     s: 4
   },
