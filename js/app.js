@@ -1,15 +1,9 @@
 'use strict';
 
-// Start Lab 03 refactor
-// Going to use an array for all of my list and my questions.
-// Going to make this code look better, no more bleeding eyes.
-
 // Track the correct answers
 let score = 0;
 
-// Array with my 5 questions and answers
 // Modeled the array after: https://stackoverflow.com/questions/40601896/how-to-get-the-value-from-an-array-which-has-key-value-pair-objects
-// Took awhile to find because I didn't know how to phrase the question.
 const bioQuestions = [
   // q = question
   // a = answer
@@ -52,15 +46,12 @@ const bioQuestions = [
     g: 'Who doesn\'t like games! I know I sure do! =)',
     t: 'YN'
   },
-  // Well I refactored my lab02 code before doing lab03 so I am going to refactor
-  // again so we can see if we can fit a square peg (integer) into a round hole (string)
   {
     q: 'I am thinking of a number between 1-10, what is it?',
     a: Math.floor(Math.random() * (10 - 1 + 1) + 1), // Added random during code review/pair programming lab04.
     t: 'INT',
     s: 4
   },
-  // Ask a multiple choice question
   {
     q: 'What is one of my FAVORITE movies?',
     a: ['Demolition Man', 'Judge Dredd', 'Dredd', 'Total Recall', 'Moon',
@@ -71,19 +62,13 @@ const bioQuestions = [
   }
 ];
 
-// Okay, now I am going to make a function that ask questions. Trying to stay DRY.
-// This was only meant for Yes or No questions. Now with lab03 I need it to also
-// support integers. I will also add true/false questions for future needs.
-
-function askGenericQuestions(questions) { // How can I force a type here? Like I only want this function to take an array as an argument.
+function askGenericQuestions(questions) {
   for (const q of questions) {
     let answer;
-    // Ok, so we are going to use a switch for the type of question
-    switch (q.t) { // Why does the linter not want the cases indented?
+    switch (q.t) {
     case 'YN': // Yes or no questions.
       answer = sanitizeInput(promptUser(q.q), 'str');
       // Now we popped the question, let's check the input.
-      // Most of this was written for lab02 refactor.
       while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
         answer = sanitizeInput(promptUser(q.q + ' Valid input: yes/no or y/n'), 'str');
       }
@@ -105,7 +90,6 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       // isInteger: https://www.tutorialspoint.com/How-to-check-if-a-variable-is-an-integer-in-JavaScript
       let tracker = 0;
       // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
-      console.log(q.a); // <---- Not working, until out of loop.
       while(tracker <= q.s - 1) { // Account for starting at 0. Better way for this?
         answer = parseInt(promptUser(q.q));
         // Check the answer
@@ -144,7 +128,6 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
         answer = answer.toLowerCase();
         // Iterate through the array and compare.
         for (const correctAnswer of q.a){
-          console.log('user answer: ' + answer + ' checked against: ' + correctAnswer);
           if (answer === correctAnswer.toLowerCase()){
             score++;
             messageUser(q.c);
@@ -154,7 +137,6 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
         tries--;
       }
       let listAnswers = '';
-      // console.log(q.a);
       if (tries === 0){
         for (const answers of q.a) { listAnswers += answers + ' '; } // Made this a one liner because it looks better.
         messageUser('Sorry the correct answers were: ' + listAnswers + ' better luck next time!');
@@ -162,17 +144,11 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       break;
     }
     default: // Should never get here. EVER.
-      console.log('Error in askGenericQuestions: ' + q.t + ' is an invalid type.'); // If you see this check the question array and make sure a: is a valid type.
       break;
     }
   }
 }
 
-// Implementing suggestion.
-// Did you mean something like this? Or do I need
-// to be in the scope of the loops?
-// this really does not change much from prompt();
-// is the point to be able to modify it down the road?
 function promptUser(question){
   // Parse
   let promptResponse = (prompt(question));
@@ -196,25 +172,6 @@ function sanitizeInput(inputValue, inputType) {
     return inputValue;
   }
 }
-
-// function askYesOrNoQuestions(questions){
-//   for (const q of questions) {
-//     let answer = askQuestion(q.q);
-//     // There has to be a better way for this.... Let me know.
-//     // Make sure the user answers yes/no or y/n
-//     while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
-//       answer = askQuestion(q.q + ' Valid input: yes/no or y/n');
-//     }
-//     // We have our answer, now let's just compare it to q.a answer
-//     if (answer === q.a) {
-//       messageUser(q.c);
-//     } else {
-//       messageUser(q.g);
-//     }
-//     // This is working q is the array and the .q is the question in the array.
-//     // console.log(q.q);
-//   }
-// }
 
 // Ok, now I am going to create a function called kickoff which will start all my other
 // functions.
@@ -254,29 +211,6 @@ function messageUser(msg) {
   // and switch to some other form of messaging. When we do, I'll be ready!
   alert(msg);
 }
-
-// function askQuestion(q) {
-//   let answer = prompt(q);
-//   // Let's squash the bug...
-//   // Essentially you can not call toLowerCase on a null value.
-//   // So this just changes the null value to an empty string.
-//   // Same effect as null - none of the side effects?
-//   // I am sure there is a better way but this works for now.
-//   // Also, why doesn't VSCode block comment huge walls of text
-//   // like this one? LOL =)
-//   if (answer === null){
-//     answer = '';
-//   }
-//   // Now we can go toLowerCase
-//   answer = answer.toLowerCase();
-//   // Sanitize the answer a bit.
-//   if (answer === 'y'){
-//     answer = 'yes';
-//   } else if (answer === 'n') {
-//     answer = 'no';
-//   }
-//   return answer;
-// }
 
 // Let's kick this party off
 kickOff();
