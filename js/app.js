@@ -56,7 +56,7 @@ const bioQuestions = [
   // again so we can see if we can fit a square peg (integer) into a round hole (string)
   {
     q: 'I am thinking of a number between 1-10, what is it?',
-    a: 6, // need to look into making this random!
+    a: Math.floor(Math.random() * (10) + 1), // Added random during code review/pair programming lab04.
     t: 'INT',
     s: 4
   },
@@ -105,6 +105,7 @@ function askGenericQuestions(questions) { // How can I force a type here? Like I
       // isInteger: https://www.tutorialspoint.com/How-to-check-if-a-variable-is-an-integer-in-JavaScript
       let tracker = 0;
       // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
+      console.log(q.a); // <---- Not working, until out of loop.
       while(tracker <= q.s - 1) { // Account for starting at 0. Better way for this?
         answer = parseInt(promptUser(q.q));
         // Check the answer
