@@ -5,84 +5,84 @@ let score = 0;
 
 // Modeled the array after: https://stackoverflow.com/questions/40601896/how-to-get-the-value-from-an-array-which-has-key-value-pair-objects
 const bioQuestions = [
-  // q = question
-  // a = answer
-  // c = congratulate
-  // g = give answer
-  // t = type YN, INT, TF, etc..
-  // s = How many tries?
+  // quetion = question
+  // answer = answer
+  // congratulate = congratulate
+  // giveAnswer = give answer
+  // questionType = type YN, INT, TF, etc..
+  // allowedAttempts = How many tries?
   {
-    q: 'Is my favorite color orange?',
-    a: 'yes',
-    c: 'My favorite color is orange! Good Job!',
-    g: 'No, my favorite color is orange!',
-    t: 'YN'
+    question: 'Is my favorite color orange?',
+    answer: 'yes',
+    congratulate: 'My favorite color is orange! Good Job!',
+    giveAnswer: 'No, my favorite color is orange!',
+    questionType: 'YN'
   },
   {
-    q: 'Do I have any experience in JavaScript?',
-    a: 'no',
-    c: 'Awesome! I really am new to JavaScript!',
-    g: 'I didn\'t know a lick of JavaScript until I started classes.',
-    t: 'YN'
+    question: 'Do I have any experience in JavaScript?',
+    answer: 'no',
+    congratulate: 'Awesome! I really am new to JavaScript!',
+    giveAnswer: 'I didn\'t know a lick of JavaScript until I started classes.',
+    questionType: 'YN'
   },
   {
-    q: 'Do I want to become a developer?',
-    a: 'yes',
-    c: 'Yep! I want to write amazing software!',
-    g: 'No, I really do want to become a great developer!',
-    t: 'YN'
+    question: 'Do I want to become a developer?',
+    answer: 'yes',
+    congratulate: 'Yep! I want to write amazing software!',
+    giveAnswer: 'No, I really do want to become a great developer!',
+    questionType: 'YN'
   },
   {
-    q: 'Is my family my rock?',
-    a: 'yes',
-    c: 'You\'re right! My family is absolutely my rock.',
-    g: 'No, my family is my world.',
-    t: 'YN'
+    question: 'Is my family my rock?',
+    answer: 'yes',
+    congratulate: 'You\'re right! My family is absolutely my rock.',
+    giveAnswer: 'No, my family is my world.',
+    questionType: 'YN'
   },
   {
-    q: 'Do I like games?',
-    a: 'yes',
-    c: 'I love games, from board games to xbox!',
-    g: 'Who doesn\'t like games! I know I sure do! =)',
-    t: 'YN'
+    question: 'Do I like games?',
+    answer: 'yes',
+    congratulate: 'I love games, from board games to xbox!',
+    giveAnswer: 'Who doesn\'t like games! I know I sure do! =)',
+    questionType: 'YN'
   },
   {
-    q: 'I am thinking of a number between 1-10, what is it?',
-    a: Math.floor(Math.random() * (10 - 1 + 1) + 1), // Added random during code review/pair programming lab04.
-    t: 'INT',
-    s: 4
+    question: 'I am thinking of a number between 1-10, what is it?',
+    answer: Math.floor(Math.random() * (10 - 1 + 1) + 1), // Added random during code review/pair programming lab04.
+    questionType: 'INT',
+    allowedAttempts: 4
   },
   {
-    q: 'What is one of my FAVORITE movies?',
-    a: ['Demolition Man', 'Judge Dredd', 'Dredd', 'Total Recall', 'Moon',
+    question: 'What is one of my FAVORITE movies?',
+    answer: ['Demolition Man', 'Judge Dredd', 'Dredd', 'Total Recall', 'Moon',
       'The Fifth Element', '47 Ronin', 'Lord of the Rings', 'The Hobbit', 'Con Air'],
-    c: 'You nailed it! Congrats!',
-    t: 'MC',
-    s: 6
+    congratulate: 'You nailed it! Congrats!',
+    questionType: 'MC',
+    allowedAttempts: 6
   }
 ];
 
 function askGenericQuestions(questions) {
   for (const q of questions) {
     let answer;
-    switch (q.t) {
+    switch (q.questionType) {
     case 'YN': // Yes or no questions.
-      answer = sanitizeInput(promptUser(q.q), 'str');
+      answer = sanitizeInput(promptUser(q.question), 'str');
       // Now we popped the question, let's check the input.
       while (answer === '' || answer === null || answer !== 'yes' && answer !== 'no'){
-        answer = sanitizeInput(promptUser(q.q + ' Valid input: yes/no or y/n'), 'str');
+        answer = sanitizeInput(promptUser(q.question + ' Valid input: yes/no or y/n'), 'str');
       }
       // Check answer
-      if (answer === q.a) {
+      if (answer === q.answer) {
         score++;
-        messageUser(q.c); // They got it!
+        messageUser(q.congratulate); // They got it!
       } else {
-        messageUser(q.g); // They didn't get it.
+        messageUser(q.giveAnswer); // They didn't get it.
         // We could ask again here, but no need for now.
       }
       break;
     case 'TF': // True or false questions.
-      answer = promptUser(q.q);
+      answer = promptUser(q.question);
       break;
     case 'INT': { // Questions expecting an integer back.
       // Think I remember something about prompt only returning a string.... and I was right.
@@ -90,21 +90,21 @@ function askGenericQuestions(questions) {
       // isInteger: https://www.tutorialspoint.com/How-to-check-if-a-variable-is-an-integer-in-JavaScript
       let tracker = 0;
       // Learned a new rule here: https://eslint.org/docs/latest/rules/no-case-declarations
-      while(tracker <= q.s - 1) { // Account for starting at 0. Better way for this?
-        answer = parseInt(promptUser(q.q));
+      while(tracker <= q.allowedAttempts - 1) { // Account for starting at 0. Better way for this?
+        answer = parseInt(promptUser(q.question));
         // Check the answer
-        if(answer === q.a) {
+        if(answer === q.answer) {
           score++;
           messageUser('You got the number in ' +(tracker + 1)+ ' tries!');
           break;
-        } else if (tracker >= q.s - 1){
-          messageUser('Sorry you didn\'t get it! The number was ' + q.a );
+        } else if (tracker >= q.allowedAttempts - 1){
+          messageUser('Sorry you didn\'t get it! The number was ' + q.answer );
           break;
         } else {
-          if (answer > q.a){
+          if (answer > q.answer){
             messageUser('My number is less than ' +answer+ '.');
           }
-          if (answer < q.a){
+          if (answer < q.answer){
             messageUser('My number is greater than ' +answer+ '.');
           } else if (!Number.isInteger(answer) || answer > 10){
             // We could credit the user another try here by using tracker--, but that's not part of lab03.
@@ -118,19 +118,19 @@ function askGenericQuestions(questions) {
     // Turns out the case was a great idea =)
     case 'MC': {
       let gotIt = false;
-      let tries = q.s; // 6
+      let tries = q.allowedAttempts; // 6
       while (tries > 0 && gotIt !== true){
         // Pop the question
-        answer = promptUser(q.q);
+        answer = promptUser(q.question);
         if (answer === null){
           answer = '';
         }
         answer = answer.toLowerCase();
         // Iterate through the array and compare.
-        for (const correctAnswer of q.a){
+        for (const correctAnswer of q.answer){
           if (answer === correctAnswer.toLowerCase()){
             score++;
-            messageUser(q.c);
+            messageUser(q.congratulate);
             gotIt = true; // I feel like this is hacky but I couldn't get out of this dang nested while loop.
           }
         }
@@ -138,7 +138,7 @@ function askGenericQuestions(questions) {
       }
       let listAnswers = '';
       if (tries === 0){
-        for (const answers of q.a) { listAnswers += answers + ' '; } // Made this a one liner because it looks better.
+        for (const answers of q.answer) { listAnswers += answers + ' '; } // Made this a one liner because it looks better.
         messageUser('Sorry the correct answers were: ' + listAnswers + ' better luck next time!');
       }
       break;
@@ -150,7 +150,6 @@ function askGenericQuestions(questions) {
 }
 
 function promptUser(question){
-  // Parse
   let promptResponse = (prompt(question));
   return promptResponse;
 }
