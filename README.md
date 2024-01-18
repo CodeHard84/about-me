@@ -1,6 +1,6 @@
 # Synopsis
 
-This is the project for module 01 class 03. The program will ask you 7 questions!
+This is the project for module 01 lab 05b. The program will ask you 7 questions!
 
 ## Code Example
 
